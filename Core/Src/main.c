@@ -18,11 +18,10 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
+#include "lv_examples.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "ST7735.h"
-#include "string.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -32,7 +31,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define BYTE_PER_PIXEL (LV_COLOR_FORMAT_GET_SIZE(LV_COLOR_FORMAT_RGB888))
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -55,13 +54,42 @@ static void MX_GPIO_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_UART4_Init(void);
 /* USER CODE BEGIN PFP */
-
+void my_disp_flush(lv_display_t * disp, const lv_area_t * area, lv_color_t * color_p);
+void lv_example_get_started_1(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
  uint8_t color[PIC_SIZE];
+
+ void my_disp_flush(lv_display_t * disp, const lv_area_t * area, lv_color_t * color_p) {
+
+    uint32_t x, y;
+
+    /*It's a very slow but simple implementation.
+     *`set_pixel` needs to be written by you to a set pixel on the screen*/
+    for(y = area->y1; y <= area->y2; y++) {
+        for(x = area->x1; x <= area->x2; x++) {
+            set_pixel(x, y, (uint8_t*)color_p);
+            color_p++;
+        }
+    }
+
+    lv_display_flush_ready(disp);         /* Indicate you are ready with the flushing*/
+}
+
+void lv_example_get_started_1(void)
+{
+    /*Change the active screen's background color*/
+    lv_obj_set_style_bg_color(lv_screen_active(), lv_color_hex(0x003a57), LV_PART_MAIN);
+
+    /*Create a white label, set its text and align it to the center*/
+    lv_obj_t * label = lv_label_create(lv_screen_active());
+    lv_label_set_text(label, "Hello world");
+    lv_obj_set_style_text_color(lv_screen_active(), lv_color_hex(0xffffff), LV_PART_MAIN);
+    lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
+}
 
 /* USER CODE END 0 */
 
@@ -99,25 +127,28 @@ int main(void)
   /* USER CODE BEGIN 2 */
  
   display_init();
+
+  lv_init();
+  void (*my_disp_flush_ptr) (lv_display_t * disp, const lv_area_t * area, lv_color_t * color_p);
+  my_disp_flush_ptr = my_disp_flush;
+
+  lv_display_t *display = lv_display_create(120,160);
+  static uint8_t buf1[120 * 160 / 10 * BYTE_PER_PIXEL];
+  lv_display_set_buffers(display, buf1, NULL, sizeof(buf1), LV_DISPLAY_RENDER_MODE_PARTIAL);  /* Initialize the display buffer. */
+  lv_display_set_flush_cb(display, my_disp_flush_ptr);
+
   
+  lv_example_get_started_1();
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-      set_red_background(color);
-      send_image(&hspi1,color);
-      HAL_Delay(1000);
-      set_green_background(color);
-      send_image(&hspi1,color);
-      HAL_Delay(1000);
-      set_blue_background(color);
-      send_image(&hspi1,color);
-      HAL_Delay(1000);
-      set_yellow_background(color);
-      send_image(&hspi1,color);
-      HAL_Delay(1000);
+    HAL_Delay(5);
+    lv_timer_handler();
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

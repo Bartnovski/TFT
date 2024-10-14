@@ -32,6 +32,10 @@ extern "C" {
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "ST7735.h"
+#include "string.h"
+#include "lvgl.h"
+
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

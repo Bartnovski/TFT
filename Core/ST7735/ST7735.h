@@ -8,9 +8,7 @@
 #ifndef ST7735_ST7735_H_
 #define ST7735_ST7735_H_
 
-#include "stm32f4xx.h"
 #include "main.h"
-
 //-------------------------------------Commands-------------------------------------------------
 
 #define NOP			0x00		//No operation
@@ -74,5 +72,7 @@ void set_red_background(uint8_t* color);
 void set_green_background(uint8_t* color);
 void set_blue_background(uint8_t* color);
 void set_yellow_background(uint8_t* color);
+
+void set_pixel(uint32_t x,uint32_t y,uint8_t *color_p);
 
 #endif /* ST7735_ST7735_H_ */

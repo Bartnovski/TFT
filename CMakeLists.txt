@@ -33,9 +33,10 @@ enable_language(C ASM)
 # Core project settings
 project(${CMAKE_PROJECT_NAME})
 message("Build type: " ${CMAKE_BUILD_TYPE})
+FILE(GLOB_RECURSE lvgl_Source CONFIGURE_DEPENDS lvgl/src/*.c )
 
 # Create an executable object type
-add_executable(${CMAKE_PROJECT_NAME})
+add_executable(${CMAKE_PROJECT_NAME} ${lvgl_Source})
 
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)
@@ -55,6 +56,10 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined include paths
     Core/ST7735
+    Core/Inc
+    lvgl
+    lvgl/src
+    lvgl/examples
 )
 
 # Add project symbols (macros)

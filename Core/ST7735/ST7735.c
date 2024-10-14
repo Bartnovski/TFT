@@ -18,6 +18,7 @@ uint8_t caset[] = {0,60,0,80};
 uint8_t raset[] = {0,80,0,100};
 uint8_t cas = CASET;
 uint8_t ras = RASET;
+
 void hwReset() {
 
 }
@@ -106,10 +107,14 @@ void set_yellow_background(uint8_t* color) {
 }
 
 
-
-
-
-
+void set_pixel(uint32_t x,uint32_t y,uint8_t *color_p) {
+	send_command(&hspi1, CASET);
+	send_byte(&hspi1,&x);
+	send_command(&hspi1, RASET);
+	send_byte(&hspi1,&y);
+	send_command(&hspi1, RAMWR);
+	send_byte(&hspi1,(uint8_t*)color_p);
+}
 
 
 
