@@ -65,7 +65,7 @@ void hwReset(void);
 void swReset(void);
 void display_init(void);
 void send_command(SPI_HandleTypeDef* spi,uint8_t cmd);
-void send_byte(SPI_HandleTypeDef* spi,uint8_t* data);
+void send_bytes(SPI_HandleTypeDef* spi,uint8_t* data,uint16_t bytes_amount);
 void send_image(SPI_HandleTypeDef* spi,uint8_t* image);
 void read_data(SPI_HandleTypeDef* spi,uint8_t cmd,uint8_t* data,uint16_t bytes_amount);
 void set_red_background(uint8_t* color);

@@ -14,11 +14,11 @@
 
 SPI_HandleTypeDef* spi = &hspi1;
 uint8_t nop = 0x00;
-uint8_t caset[] = {0,60,0,80};
-uint8_t raset[] = {0,80,0,100};
+uint8_t caset[] = {0,0,0,162};
+uint8_t raset[] = {0,0,0,132};
 uint8_t cas = CASET;
 uint8_t ras = RASET;
-
+uint8_t madctl = 0x3E; 	//	RGB -> BGR
 void hwReset() {
 
 }
@@ -33,6 +33,8 @@ void display_init() {
 	send_command(spi, DISPON);
 	HAL_Delay(120);
 	send_command(spi, SLPOUT);
+	// send_command(spi, MADCTL);
+	// send_bytes(spi,&madctl,1);
 }
 
 void send_command(SPI_HandleTypeDef* spi,uint8_t cmd) {
@@ -42,10 +44,10 @@ void send_command(SPI_HandleTypeDef* spi,uint8_t cmd) {
 	CS_H();
 }
 
-void send_byte(SPI_HandleTypeDef* spi,uint8_t* data) {
+void send_bytes(SPI_HandleTypeDef* spi,uint8_t* data,uint16_t bytes_amount) {
 	CS_L();
 	DATA_MODE();
-	HAL_SPI_Transmit(spi, data, 1, 100);
+	HAL_SPI_Transmit(spi, data, bytes_amount, 100);
 	CS_H();
 }
 
@@ -109,11 +111,13 @@ void set_yellow_background(uint8_t* color) {
 
 void set_pixel(uint32_t x,uint32_t y,uint8_t *color_p) {
 	send_command(&hspi1, CASET);
-	send_byte(&hspi1,&x);
+	caset[1] = x;
+	send_bytes(&hspi1,caset,2);
 	send_command(&hspi1, RASET);
-	send_byte(&hspi1,&y);
+	raset[1] = y;
+	send_bytes(&hspi1,raset,2);
 	send_command(&hspi1, RAMWR);
-	send_byte(&hspi1,(uint8_t*)color_p);
+	send_bytes(&hspi1,(uint8_t*)color_p,3);
 }
 
 

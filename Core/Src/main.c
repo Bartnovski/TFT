@@ -82,7 +82,7 @@ void lv_example_get_started_1(void);
 void lv_example_get_started_1(void)
 {
     /*Change the active screen's background color*/
-    lv_obj_set_style_bg_color(lv_screen_active(), lv_color_hex(0x003a57), LV_PART_MAIN);
+    lv_obj_set_style_bg_color(lv_screen_active(), lv_color_hex(0x573a00), LV_PART_MAIN);
 
     /*Create a white label, set its text and align it to the center*/
     lv_obj_t * label = lv_label_create(lv_screen_active());
@@ -91,6 +91,20 @@ void lv_example_get_started_1(void)
     lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
 }
 
+void lv_example_get_started_4(void)
+{
+    /*Create a slider in the center of the display*/
+    lv_obj_t * label = lv_label_create(lv_screen_active());
+    lv_obj_t * slider = lv_slider_create(lv_screen_active());
+    lv_obj_set_width(slider, 100);                          /*Set the width*/
+    lv_obj_center(slider);                                  /*Align to the center of the parent (screen)*/
+    //lv_obj_add_event_cb(slider, slider_event_cb, LV_EVENT_VALUE_CHANGED, NULL);     /*Assign an event function*/
+
+    /*Create a label above the slider*/
+    label = lv_label_create(lv_screen_active());
+    lv_label_set_text(label, "0");
+    lv_obj_align_to(label, slider, LV_ALIGN_OUT_TOP_MID, 0, -15);    /*Align top of the slider*/
+}
 /* USER CODE END 0 */
 
 /**
@@ -132,13 +146,13 @@ int main(void)
   void (*my_disp_flush_ptr) (lv_display_t * disp, const lv_area_t * area, lv_color_t * color_p);
   my_disp_flush_ptr = my_disp_flush;
 
-  lv_display_t *display = lv_display_create(120,160);
+  lv_display_t *display = lv_display_create(132,162);
   static uint8_t buf1[120 * 160 / 10 * BYTE_PER_PIXEL];
   lv_display_set_buffers(display, buf1, NULL, sizeof(buf1), LV_DISPLAY_RENDER_MODE_PARTIAL);  /* Initialize the display buffer. */
   lv_display_set_flush_cb(display, my_disp_flush_ptr);
 
   
-  lv_example_get_started_1();
+  lv_example_get_started_4();
 
   /* USER CODE END 2 */
 

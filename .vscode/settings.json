@@ -3,6 +3,7 @@
         "lvgl.h": "c",
         "lv_version.h": "c",
         "string.h": "c",
-        "lv_example_get_started.h": "c"
+        "lv_example_get_started.h": "c",
+        "st7735.h": "c"
     }
 }
